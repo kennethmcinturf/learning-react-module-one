@@ -2,6 +2,7 @@ import React , { Component } from 'react';
 import styles from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from "../components/Cockpit/Cockpit";
+import WithClass from '../hoc/WithClass';
 
 class App extends Component {
     constructor(props){
@@ -23,6 +24,19 @@ class App extends Component {
 
     componentDidMount(){
         console.log('[App.js] Inside componentDidMount()');
+    }
+
+    shouldComponentUpdate(nextProps, nextState){
+        console.log('[UPDATE App.js] Inside shouldComponentUpdate', nextProps, nextState);
+        return true;
+    }
+
+    componentWillUpdate(nextProps, nextState){
+        console.log('[UPDATE App.js] Inside componentWillUpdate', nextProps, nextState);
+    }
+
+    componentDidUpdate(){
+        console.log('[UPDATE App.js] Inside componentDidUpdate');
     }
 
     // state = {
@@ -90,14 +104,15 @@ class App extends Component {
 
 
     return (
-      <div className={styles.App}>
+        <WithClass classes={styles.App}>
+          <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
           <Cockpit
               appTitle = {this.props.title}
               showPersons = {this.state.showPersons}
           persons = {this.state.persons}
           clicked = {this.togglePersonsHandler}/>
           {persons}
-      </div>
+        </WithClass>
     );
     //   return React.createElement('div', {className: 'App'}, React.createElement('h1',null, 'Does this work now?'));
   }
