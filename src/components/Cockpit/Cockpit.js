@@ -1,7 +1,7 @@
 import React from 'react';
 // import styles from "../../containers/App.css";
 import styles from "./Cockpit.css"
-import Aux from "../../hoc/Aux";
+// import Aux from "../../hoc/Aux";
 
 const cockpit = (props) => {
     const assignedClasses = [];
@@ -24,6 +24,7 @@ const cockpit = (props) => {
             <button
                 className={btnClass}
                 onClick={props.clicked}>Toggle Persons</button>
+            <button onClick={props.login}>Log In</button>
         </>
 );
 };

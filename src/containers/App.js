@@ -2,7 +2,10 @@ import React , { Component } from 'react';
 import styles from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from "../components/Cockpit/Cockpit";
-import WithClass from '../hoc/WithClass';
+import Aux from '../hoc/Aux';
+import withClass from '../hoc/withClass';
+
+export const AuthContext = React.createContext(false);
 
 class App extends Component {
     constructor(props){
@@ -14,7 +17,9 @@ class App extends Component {
                 {id: 'gdgdgs',name: 'Manu', age: 29},
                 {id: 'dgegwg',name: 'Stephanie', age: 26}
             ],
-            showPersons: false
+            showPersons: false,
+            toggleClicked: 0,
+            authentication : false
         };
     }
 
@@ -87,9 +92,16 @@ class App extends Component {
 
     togglePersonsHandler = (prevState) => {
         const doesShow = this.state.showPersons;
-        this.setState({showPersons: !doesShow
-        })
-    };
+        this.setState((prevState, props) => {
+          return{
+              showPersons: !doesShow,
+              toggleClicked: prevState.toggleClicked + 1
+          }
+        })};
+
+    loginHandler = () => {
+        this.setState({authentication: true});
+    }
 
   render() {
       console.log('[App.js] Inside render()');
@@ -99,23 +111,27 @@ class App extends Component {
         persons = <Persons
                     persons = {this.state.persons}
                 clicked = {this.deletePersonHandler}
-                changed = {this.nameChangedHandler}/>
+                changed = {this.nameChangedHandler}
+        />
     }
 
 
     return (
-        <WithClass classes={styles.App}>
+        <Aux>
           <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
           <Cockpit
               appTitle = {this.props.title}
               showPersons = {this.state.showPersons}
           persons = {this.state.persons}
+              login = {this.loginHandler}
           clicked = {this.togglePersonsHandler}/>
-          {persons}
-        </WithClass>
+            <AuthContext.Provider value={this.state.authentication}>
+                {persons}
+                </AuthContext.Provider>
+        </Aux>
     );
     //   return React.createElement('div', {className: 'App'}, React.createElement('h1',null, 'Does this work now?'));
   }
 }
 
-export default App;
+export default withClass(App, styles.App);
